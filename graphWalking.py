@@ -18,7 +18,7 @@ class Graph:
 
     def insert(self):
         nodes=queue.Queue()
-        rootData=int(input("Enter root node : "))
+        rootData=input("Enter root node : ")
         node = Node()
         node.data=rootData
         self.root=node
@@ -31,7 +31,7 @@ class Graph:
             else:
                 connections=int(input("Enter the number of connections from/to node {} other than node(s) {} : ".format(node.data, self.getNodeData(node.neighbors))))
             for _ in range(connections):
-                connectionNodeData=int(input("Enter connection node data : "))
+                connectionNodeData=input("Enter connection node data : ")
                 if connectionNodeData==0:
                     break
                 for n in nodes.queue:
