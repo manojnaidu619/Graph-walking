@@ -1,49 +1,54 @@
-import queue
+
 class Node:
     def __init__(self):
         self.data=None
         self.neighbors=[]
 
 class Graph:
-    
     def __init__(self):
         self.root=None
+        self.nodes=[]
 
-    def getNodeData(self,nodesList):
-        nodeData=""
-        for x in nodesList:
-            nodeData+=("," + str(x.data))
-        return nodeData[1:]        
+    def searchForExisitingNode(self, SearchNodeData, SearchNode):
+        for x in self.nodes:
+            if x.data==SearchNodeData:
+                x.neighbors.append(SearchNode)
+                return True
+        return False
 
+    def getNeighborNodes(self, nodes):
+        nodesList = ""
+        for x in nodes:            
+            nodesList += str(x.data + ",")
+        return nodesList    
 
-    def insert(self):
-        nodes=queue.Queue()
-        rootData=input("Enter root node : ")
-        node = Node()
-        node.data=rootData
-        self.root=node
-        nodes.put(node)              
-        while not nodes.empty():
-            nodeExists=False
-            node = nodes.get()
-            if len(node.neighbors)==0:
-                connections=int(input("Enter the number of connections from/to node {} : ".format(node.data)))
+    def buildGraph(self):
+        nodesToAdd=[]
+        rootData = input("Enter root data : ")
+        rootNode = Node()
+        rootNode.data = rootData
+        self.root = rootNode
+        nodesToAdd.append(rootNode)
+
+        while len(nodesToAdd)>0:
+            node = nodesToAdd.pop(0)
+            self.nodes.append(node)
+
+            if not node.neighbors:
+                neighborCount = int(input("Enter no of neighbors of node {} : ".format(node.data)))
             else:
-                connections=int(input("Enter the number of connections from/to node {} other than node(s) {} : ".format(node.data, self.getNodeData(node.neighbors))))
-            for _ in range(connections):
-                connectionNodeData=input("Enter connection node data : ")
-                if connectionNodeData==0:
-                    break
-                for n in nodes.queue:
-                    if n.data==connectionNodeData:
-                        n.neighbors.append(node)
-                        nodeExists=True
-                if nodeExists==False:    
-                    connectionNode = Node()
-                    connectionNode.data=connectionNodeData
-                    connectionNode.neighbors.append(node)
-                    node.neighbors.append(connectionNode)
-                    nodes.put(connectionNode)
+                nodesList = self.getNeighborNodes(node.neighbors)    
+                neighborCount = int(input("Enter no of neighbors of node {} other than {} : ".format(node.data, nodesList)))
+            
+            for _ in range(neighborCount):
+                neighborData = input("Enter neighbor data : ")
+                if not self.searchForExisitingNode(neighborData, node):
+                    newNode = Node()
+                    newNode.data = neighborData
+                    newNode.neighbors.append(node)
+                    node.neighbors.append(newNode)
+                    nodesToAdd.append(newNode)
+                    self.nodes.append(newNode)
 
     def bfs(self):
         root = self.root
@@ -56,9 +61,9 @@ class Graph:
             print(node.data, end=" ")
             for x in node.neighbors:
                 if x not in visited:
-                    temp.append(x)
+                    temp.append(x)                
 
 graph = Graph()
-graph.insert()
+graph.buildGraph()
 graph.bfs()
-
+                   
