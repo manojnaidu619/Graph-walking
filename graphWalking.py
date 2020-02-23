@@ -64,7 +64,23 @@ class Graph:
                 if x not in visited:
                     temp.put(x)                
 
+    def dfs(self):
+        stack, visited = [], []
+        root = self.root
+        stack.append(root)
+        print("\nDFS : ")
+        while len(stack)>0:
+            node = stack.pop()
+            if node not in visited:
+                visited.append(node)
+                print(node.data,end=" ")
+            for x in node.neighbors:
+                if x not in visited:
+                    stack.append(x)                
+
+
 graph = Graph()
 graph.buildGraph()
 graph.bfs()
+graph.dfs()
                    
